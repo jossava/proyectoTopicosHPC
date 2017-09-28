@@ -11,9 +11,8 @@ from mpi4py import MPI
 comm = MPI.COMM_WORLD
 
 print 'My rank is', comm.rank
-if comm.rank == 1;:
+if comm.rank == 1:
     print 'Doing the task of rank 1'
-
 
 if comm.rank == 2:
   print 'Haciendo la tarea del nodo 2'

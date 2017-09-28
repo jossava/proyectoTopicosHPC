@@ -7,4 +7,4 @@ if ! [ -x /usr/bin/nproc ]; then
 fi
 CORES=$(nproc)
 EXAMPLE=1
-mpiexec -np ${CORES} python ./hello_world${EXAMPLE}.py
+mpiexec -np $CORES python ./hello_world${EXAMPLE}.py
