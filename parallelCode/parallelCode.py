@@ -33,7 +33,7 @@ def getMainWords(v):
 
 # Encuentra las veces que se repite cada una de las palabras de T en cada archivo.
 def findT(w):
-    frecuencia = {}
+    frecuency = {}
     for i in range(comm.rank, len(v), comm.size):
         result = []
         for j in range(len(w)):
@@ -46,10 +46,10 @@ def findT(w):
                 if word in w:
                     result[w.index(word)] += 1
 
-        frecuencia[v[i]] = result
-    return frecuencia
+        frecuency[v[i]] = result
+    return frecuency
 
-# Se llena toda la matriz con las distancias entre pares de documentos.
+# Se llena toda la matrix con las distancias entre pares de documentos.
 def jaccardDistances(x):
     tam = len(x)
     matrixC = np.zeros((tam, tam))
@@ -81,15 +81,15 @@ def kMeansC(mJack, cent):
 
 # Se reubican los centrodes teniendo en cuenta el promedio de sus documentos.
 def kMeansRc(z):
-    centroidesTemp = []
+    centroidsTemp = []
     for i in range(k):
-        centroidesTemp.insert(i, [])
+        centroidsTemp.insert(i, [])
     for i in range(comm.rank, k, comm.size):
         truefalseArr = z == i
         propiosKArr = mJack[truefalseArr]
         promedioArr = propiosKArr.mean(axis=0)
-        centroidesTemp[i]=list(promedioArr)
-    return centroidesTemp
+        centroidsTemp[i]=list(promedioArr)
+    return centroidsTemp
 
 if __name__ == '__main__':
     timeini = time.time()
@@ -108,24 +108,24 @@ if __name__ == '__main__':
         for i in range(len(recibV)):
             tFinal.extend([element for element in recibV[i] if element not in tFinal])
     w = comm.bcast(tFinal, root)
-    frecuencia = findT(w)
-    recibFrecuencia = comm.gather(frecuencia,root)
-    mapaFinal = {}
+    frecuency = findT(w)
+    recibfrecuency = comm.gather(frecuency,root)
+    finalMap = {}
     if(comm.rank == 0):
-        for i in range(len(recibFrecuencia)):
-            mapaFinal.update(recibFrecuencia[i])
-    x = comm.bcast(mapaFinal, root)
+        for i in range(len(recibfrecuency)):
+            finalMap.update(recibfrecuency[i])
+    x = comm.bcast(finalMap, root)
     matrixC = jaccardDistances(x)
     recibMatrixC = comm.gather(matrixC, root)
     C = []
     centroids = []
-    matrizFinal = 0
+    matrixFinal = 0
     if comm.rank == 0:
         for matrix in recibMatrixC:
-            matrizFinal += matrix
-        centroids = matrizFinal[np.random.choice(np.arange(len(matrizFinal)), k), :]
+            matrixFinal += matrix
+        centroids = matrixFinal[np.random.choice(np.arange(len(matrixFinal)), k), :]
     for i in range(maxIters):
-        mJack = comm.bcast(matrizFinal,root)
+        mJack = comm.bcast(matrixFinal,root)
         cent = comm.bcast(centroids, root)
         argminList = kMeansC(mJack,cent)
         recibC = comm.gather(argminList, root)
@@ -134,17 +134,17 @@ if __name__ == '__main__':
             cFinal = np.zeros(len(recibC[0]))
             for li in range(len(recibC)):
                 cFinal += recibC[li]
-        z = comm.bcast(cFinal,root)
-        centroidesTemp = kMeansRc(z)   
-        recibZ = comm.gather(centroidesTemp,root)
-        centroidesFinales = []
+        finalC = comm.bcast(cFinal,root)
+        centroidsTemp = kMeansRc(finalC)   
+        recibFinalC = comm.gather(centroidsTemp,root)
+        finalCentroids = []
         for j in range(k):
-            centroidesFinales.append([])
+            finalCentroids.append([])
         if comm.rank == 0:
-            for i in range(len(recibZ)):
-                for j in range(len(recibZ[i])):
-                    centroidesFinales[j] += recibZ[i][j]
-            centroids = centroidesFinales
+            for i in range(len(recibFinalC)):
+                for j in range(len(recibFinalC[i])):
+                    finalCentroids[j] += recibFinalC[i][j]
+            centroids = finalCentroids
 
     if comm.rank == 0:
         print("Tiempo final: ", time.time()-timeini)
@@ -152,7 +152,7 @@ if __name__ == '__main__':
         for i in range(k):
             cluster = []
             for j in range(len(fileList)):
-                if(z[j]==i):
+                if(finalC[j]==i):
                     cluster.append(fileList[j]) # agregamos el documento si pertenece al cluster i
             if len(cluster) != 0:
-                print ("cluster " + str(i) + ": " + str(cluster))
+                print ("Cluster " + str(i) + ": " + str(cluster))
