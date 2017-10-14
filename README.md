@@ -4,15 +4,15 @@
 
 1. Serial
 Cuando se requiera ejecutar el programa en serial se debe estar en la carpeta donde se encuentra se debe poner la siguiente línea,
- <python2.7 serialCode.py ./{Carpeta donde se encuentran los documentos}/
+$ python2.7 serialCode.py ./{Carpeta donde se encuentran los documentos}/
 
 2. Paralelo
 Cuando se requiera ejecutar el programa en paralelo se debe estar en la carpeta donde se encuentra poner la siguiente línea, 
-<mpiexec -np {número de nucleos} python2.7 parallelCode.py ./{Carpeta donde se encuentran los documentos}/
+$ mpiexec -np {número de nucleos} python2.7 parallelCode.py ./{Carpeta donde se encuentran los documentos}/
 
 # 1. Realizado por:
 1. Dillan Alexis Muñeton Avendaño - dmuneto1@eafit.edu.co
-2. Juan Fernando Ossa Vásquez - @eafit.edu.co
+2. Juan Fernando Ossa Vásquez - jossava@eafit.edu.co
 
 # 2. Introducción:
 
@@ -28,7 +28,7 @@ Jaccard: mide el grado de similitud entre dos conjuntos.
 
 # 4. Análisis y Diseño de algoritmos:
 El análisis de los algoritmos fue posible gracias a la lectura de los papers indicados por el orientador, en los cuales, tomaban en cuenta ciertas comparaciones entre los métodos que median el grado de similitud, además mostraban claramente las excepciones y detalles que debían ser tenidos en cuenta.
-Los algoritmos que se utilizaron fueron Jaccard para obtener las distancias entre los documentos y KMeans para agrupar los documentos en sus respectivos centros*
+Los algoritmos que se utilizaron fueron Jaccard para obtener las distancias entre los documentos y KMeans para agrupar los documentos en sus respectivos centroides*
 #### Jaccard:
 *El índice de Jaccard o coeficiente de Jaccard mide el grado de similitud entre dos conjuntos, sea cual sea el tipo de elementos.
 
