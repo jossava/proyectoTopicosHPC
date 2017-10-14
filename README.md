@@ -3,9 +3,12 @@
 #### EJECUCIÓN
 
 1. Serial
-Cuando se requiera ejecutar el programa en serial se debe estar en la carpeta donde se encuentra se debe poner la siguiente línea, <python2.7 serialCode.py ./{Carpeta donde se encuentran los documentos}/
+Cuando se requiera ejecutar el programa en serial se debe estar en la carpeta donde se encuentra se debe poner la siguiente línea,
+ <python2.7 serialCode.py ./{Carpeta donde se encuentran los documentos}/
+
 2. Paralelo
-Cuando se requiera ejecutar el programa en paralelo se debe estar en la carpeta donde se encuentra poner la siguiente línea, <mpiexec -np {número de nucleos} python2.7 parallelCode.py ./{Carpeta donde se encuentran los documentos}/
+Cuando se requiera ejecutar el programa en paralelo se debe estar en la carpeta donde se encuentra poner la siguiente línea, 
+<mpiexec -np {número de nucleos} python2.7 parallelCode.py ./{Carpeta donde se encuentran los documentos}/
 
 # 1. Realizado por:
 1. Dillan Alexis Muñeton Avendaño - dmuneto1@eafit.edu.co
@@ -18,7 +21,9 @@ El dataset se obtuvo de Gutenberg por medio del siguiente link, https://goo.gl/L
 
 # 3. Palabras clave:
 Stopwords: lista de palabras que no deberian ser tomadas en cuenta al momento de comparar los documentos.
+
 Kmeans: es un método de agrupamiento, que tiene como objetivo la partición de un conjunto de n observaciones en k grupos.
+
 Jaccard: mide el grado de similitud entre dos conjuntos.
 
 # 4. Análisis y Diseño de algoritmos:
