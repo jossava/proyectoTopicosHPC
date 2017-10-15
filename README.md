@@ -48,7 +48,7 @@ https://gist.github.com/bistaumanga/6023692*
 
 # 5. Análisis de solución:
 
-![alt text](https://ibb.co/e7vggR "Logo Title Text 1")
+![alt text](https://preview.ibb.co/dTLso6/serialvs_Paralelo.png)
 Al ejecutar el código serial con una cantidad de 10 documentos se observaron los siguientes comportamientos:
 Al ejecutar el código paralelo con una cantidad de 10 documentos se observaron los siguientes comportamientos:
 
