@@ -48,12 +48,21 @@ https://gist.github.com/bistaumanga/6023692*
 
 # 5. Análisis de solución:
 
-![alt text](https://preview.ibb.co/dTLso6/serialvs_Paralelo.png)
-Al ejecutar el código serial con una cantidad de 10 documentos se observaron los siguientes comportamientos:
-Al ejecutar el código paralelo con una cantidad de 10 documentos se observaron los siguientes comportamientos:
+Para analizar el uso de recursos al ejecutar el los códigos en serial y paralelo utilizamos "htop", el cual nos muestra la siguiente interfaz (sin ejecutar ninguno de los programas).
 
-Al ejecutar el código serial con una cantidad de 100 documentos se observaron los siguientes comportamientos:
-Al ejecutar el código paralelo con una cantidad de 100 documentos se observaron los siguientes comportamientos:
+![alt text](https://preview.ibb.co/euEco6/estado_Normal.png)
+
+Al ejecutar el código serial, podemos observar que se usa toda la capacidad de un único núcleo:
+
+![alt text](https://preview.ibb.co/jwFvam/estado_Serial.png)
+
+Al ejecutar el código serial, podemos observar que se usa toda la capacidad de todos los núcleos de la máquina:
+
+![alt text](https://preview.ibb.co/mxwe1R/estado_Paralelo.png)
+
+Por último, para hacer un análisis de velocidad se hicieron varias ejecuciones de los programas (serial y paralelo), utilizando diferentes cantidades de documentos, con lo cual es notable la disminución de tiempo de ejecución del código en paralelo con respecto al serial, esto se muestra en la siguiente gráfica:
+
+![alt text](https://preview.ibb.co/dTLso6/serialvs_Paralelo.png)
 
 
 # 6.Bibliografía:
