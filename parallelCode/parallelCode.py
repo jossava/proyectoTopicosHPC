@@ -93,50 +93,50 @@ def kMeansRc(z):
 
 if __name__ == '__main__':
     timeini = time.time()
-    k = 2
-    maxIters = 10
+    k = 2  # se recibe la nueva matriz con los centroides, realizada por cada nucleo
+    maxIters = 10 # numero maximo de iteraciones del kmeans
     rootDir = sys.argv[1]
     T = []
     fileList = []
     if comm.rank == 0:
-        fileList = list(os.walk(rootDir))[0][2]
-    v = comm.bcast(fileList, root)
-    toSend = getMainWords(v)
-    recibV = comm.gather(toSend,root)
-    tFinal = []
+        fileList = list(os.walk(rootDir))[0][2] # el nucleo 0 lee la lista de archivos
+    v = comm.bcast(fileList, root) # se hace un broadcast para enviar la lista de archivos a todos los nucleos
+    toSend = getMainWords(v) # Se obtiene Ti con i = 0,1,2,3 -> nucleos
+    recibV = comm.gather(toSend,root) # el nucleo 0 recibe Ti con i = 0,1,2,3 -> nucleos
+    tFinal = [] 
     if comm.rank == 0:
         for i in range(len(recibV)):
-            tFinal.extend([element for element in recibV[i] if element not in tFinal])
-    w = comm.bcast(tFinal, root)
-    frecuency = findT(w)
+            tFinal.extend([element for element in recibV[i] if element not in tFinal]) # se unen los Ti en tFinal
+    w = comm.bcast(tFinal, root) # se envia el tFinal a todos los nucleos
+    frecuency = findT(w) # se obtienen los tij con i = nucleos y j = documentos
     recibfrecuency = comm.gather(frecuency,root)
     finalMap = {}
     if(comm.rank == 0):
         for i in range(len(recibfrecuency)):
-            finalMap.update(recibfrecuency[i])
-    x = comm.bcast(finalMap, root)
-    matrixC = jaccardDistances(x)
-    recibMatrixC = comm.gather(matrixC, root)
+            finalMap.update(recibfrecuency[i]) # se unen los tij
+    x = comm.bcast(finalMap, root) # se envian los tij a todos los nucleos
+    matrixC = jaccardDistances(x) # se callculan las distacias con jaccard, esto lo hace cada nucleo
+    recibMatrixC = comm.gather(matrixC, root) # El nucleo 0 recible la matriz i (i es cada nucleo) con las distancias.
     C = []
     centroids = []
     matrixFinal = 0
     if comm.rank == 0:
         for matrix in recibMatrixC:
-            matrixFinal += matrix
-        centroids = matrixFinal[np.random.choice(np.arange(len(matrixFinal)), k), :]
+            matrixFinal += matrix # se unen las mattrices i
+        centroids = matrixFinal[np.random.choice(np.arange(len(matrixFinal)), k), :] # se ubican los centroides aleatoriamente.
     for i in range(maxIters):
-        mJack = comm.bcast(matrixFinal,root)
-        cent = comm.bcast(centroids, root)
-        argminList = kMeansC(mJack,cent)
-        recibC = comm.gather(argminList, root)
+        mJack = comm.bcast(matrixFinal,root) # se envia la matriz con las distancias a cada nucleo
+        cent = comm.bcast(centroids, root) # Se envia el arreglo que me dice en que centroide esta cada documento
+        argminList = kMeansC(mJack,cent) # se recibe la nueva matriz con los centroides, realizada por cada nucleo
+        recibC = comm.gather(argminList, root)  # el nodo 0 recibe recibC
         cFinal = []
         if comm.rank == 0:
             cFinal = np.zeros(len(recibC[0]))
             for li in range(len(recibC)):
                 cFinal += recibC[li]
-        finalC = comm.bcast(cFinal,root)
-        centroidsTemp = kMeansRc(finalC)   
-        recibFinalC = comm.gather(centroidsTemp,root)
+        finalC = comm.bcast(cFinal,root) # se envia cFinal a todos los nucleos
+        centroidsTemp = kMeansRc(finalC) # se reubican los centroides, esto lo hacen todos los nucleos
+        recibFinalC = comm.gather(centroidsTemp,root) # el nucleo 0 recibe la reubicacion de los centroides
         finalCentroids = []
         for j in range(k):
             finalCentroids.append([])
@@ -147,6 +147,7 @@ if __name__ == '__main__':
             centroids = finalCentroids
 
     if comm.rank == 0:
+        # el nucleo 0 imprime cada k cluster con sus respectivos documentos
         print("Tiempo final: ", time.time()-timeini)
         listaFiles = list(x.keys())
         for i in range(k):
@@ -155,4 +156,5 @@ if __name__ == '__main__':
                 if(finalC[j]==i):
                     cluster.append(fileList[j]) # agregamos el documento si pertenece al cluster i
             if len(cluster) != 0:
-                print ("Cluster " + str(i) + ": " + str(cluster))
+                print ""
+                #print ("Cluster " + str(i) + ": " + str(cluster))

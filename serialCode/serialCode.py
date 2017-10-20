@@ -104,4 +104,5 @@ if __name__ == '__main__':
             if(C[j]==i):
                 cluster.append(fileList[j]) # agregamos el documento si pertenece al cluster i
         if len(cluster) != 0:
-            print ("cluster " + str(i) + ": " + str(cluster))
+            print ""
+            #print ("cluster " + str(i) + ": " + str(cluster))
