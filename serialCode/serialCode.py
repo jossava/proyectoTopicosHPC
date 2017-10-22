@@ -96,7 +96,7 @@ if __name__ == '__main__':
     findT = findT(T)
     matrizJaccard = jaccardDistances(findT)
     centroides, C = kMeans(matrizJaccard, k)
-    print("Tiempo final: ", time.time() - timeini)
+    print("Tiempo final: " + rootDir +str(time.time() - timeini))
     fileList = list(findT.keys()) # nombres de los documentos
     for i in range(k):
         cluster = []
